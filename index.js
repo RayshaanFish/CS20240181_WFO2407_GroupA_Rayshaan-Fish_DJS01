@@ -6,26 +6,31 @@
  */
 
 // Given Parameters
-const vel = 10000; // velocity (km/h)
-const acc = 3; // acceleration (m/s^2)
-const time = 3600; // seconds (1 hour)
-const d = 0; // distance (km)
-const fuel = 5000; // remaining fuel (kg)
-const fbr = 0.5; // fuel burn rate (kg/s)
+const initialVelocityKMH = 10000; // velocity (km/h)
+const accelerationKMH = 3 * 12960; // acceleration (coverted from m/s^2 to km/h^2)
+const timeHours = 3600 / 3600 // seconds (1 hour)
+const initialDistanceKM = 0; // distance (km)
+const fuelKG = 5000; // remaining fuel (kg)
+const fuelBurnRateKG = 0.5 * 3600; // fuel burn rate converted from (kg/s) to (kg/h)
 
 
-const d2 = d + (vel*time) //calcultes new distance
-const rf = fbr*time //calculates remaining fuel
-const vel2 = calcNewVel(acc, vel, time) //calculates new velocity based on acceleration
+
+const newDistance = initialDistanceKM + (initialVelocityKMH * timeHours) //calcultes new distance
+const remainingFuel = fuelKG - (fuelBurnRateKG * timeHours) //calculates remaining fuel
 
 // Pick up an error with how the function below is called and make it robust to such errors
-calcNewVel = (vel, acc, time) => { 
-  return vel + (acc*time)
+const calcNewVelocity = (initialVelocityKMH, accelerationKMH, timeHours) => { 
+  if (initialVelocityKMH < 0 || accelerationKMH < 0 || timeHours < 0) {
+    throw new Error('Invalid entry: Entry fields can not be negative values')
+  }
+  return initialVelocityKMH + (accelerationKMH * timeHours)
 }
 
-console.log(`Corrected New Velocity: ${vel2} km/h`);
-console.log(`Corrected New Distance: ${d2} km`);
-console.log(`Corrected Remaining Fuel: ${rf} kg`);
+const newVelocity = calcNewVelocity(initialVelocityKMH, accelerationKMH, timeHours) //calculates new velocity based on acceleration
+
+console.log(`Corrected New Velocity: ${newVelocity} km/h`);
+console.log(`Corrected New Distance: ${newDistance} km`);
+console.log(`Corrected Remaining Fuel: ${remainingFuel} kg`);
 
 
 
